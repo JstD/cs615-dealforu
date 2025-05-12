@@ -1,6 +1,8 @@
 import avtImage from "../assets/avt.png"; // replace with correct image
 import StarRating from "./StarRating";
 import CommentBox from "./CommentBox";
+import ClaimModal from "./ClaimModal";
+import { use, useState, useEffect } from "react";
 const DealDetails = ({
   id,
   title,
@@ -16,18 +18,41 @@ const DealDetails = ({
   description,
   mode,
 }) => {
-  console.log(mode);
+  const [showModal, setShowModal] = useState(false);
+  const [isManager, setIsManager] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const userData = JSON.parse(user);
+    if (userData?.mode === "manager") {
+      setIsManager(true);
+    } else {
+      setIsManager(false);
+    }
+  }, []);
+
   return (
     <>
       <div className="justify-between">
         <span className="font-bold text-5xl"> {title}</span>
         {mode === "customer" && (
           <span className="mt-4  px-10  text-right">
-            <button className="bg-amber-100 hover:bg-amber-200 px-4 py-2 rounded-full text-xl shadow">
+            <button
+              className="bg-amber-100 hover:bg-amber-200 px-4 py-2 rounded-full text-xl shadow cursor-pointer"
+              onClick={() => {
+                const user = localStorage.getItem("user");
+                if (!user) {
+                  navigate("/login");
+                  return;
+                }
+                setShowModal(true);
+              }}
+            >
               Claim now
             </button>
           </span>
         )}
+        {showModal && <ClaimModal onClose={() => setShowModal(false)} />}
         <div className="flex items-center justify-between mt-2">
           <img
             src={imageSrc}
@@ -79,9 +104,13 @@ const DealDetails = ({
           Show more
         </p>
       </div>
-      <StarRating />
+      {!isManager && (
+        <div>
+          <StarRating />
 
-      <CommentBox> </CommentBox>
+          <CommentBox> </CommentBox>
+        </div>
+      )}
     </>
   );
 };

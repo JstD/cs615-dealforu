@@ -48,7 +48,14 @@ export default function DealCard({
         {/* Claim button */}
         <button
           className="mt-4 px-4 py-1 bg-[#f5e0d7] text-black rounded-full font-medium hover:bg-[#e6cfc2] cursor-pointer"
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            const user = localStorage.getItem("user");
+            if (!user) {
+              navigate("/login");
+              return;
+            }
+            setShowModal(true);
+          }}
         >
           Claim now
         </button>

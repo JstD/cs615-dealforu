@@ -145,6 +145,12 @@ const LoginPage = () => {
             Forgot Password?
           </a>
         </div>
+        <div className="mt-4 text-center">
+          If you don't have an account,{" "}
+          <a href="#" className="text-sm underline text-blue">
+            Sign up
+          </a>
+        </div>
       </div>
     </div>
   );
